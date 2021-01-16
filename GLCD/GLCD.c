@@ -713,6 +713,17 @@ void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t color){
 	}
 }
 
+void Clear_Footer(void){
+	int index;
+	
+	LCD_SetCursor(0,240);
+	LCD_WriteIndex(0x0022);
+		for( index = 0; index < 240* 72 ; index++ )
+	{
+		LCD_WriteData(Black);
+	}
+}
+
 
 /*********************************************************************************************************
       END FILE
