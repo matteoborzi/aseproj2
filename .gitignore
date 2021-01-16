@@ -73,3 +73,9 @@ DebugConfig*
 *.lnp
 *.plg
 RTE*
+*.Paolo
+
+# Pictures
+*.png
+*.bmp
+*.jpg
