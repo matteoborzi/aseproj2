@@ -22,6 +22,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "GLCD.h" 
 #include "AsciiLib.h"
+#include "../Bitmaps/bitmaps.h"
 
 /* Private variables ---------------------------------------------------------*/
 static uint8_t LCD_Code;
@@ -669,9 +670,37 @@ void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_
     while ( *str != 0 );
 }
 
-void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned int mode){
+void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned int mode, uint16_t color, uint16_t bkColor){
+	int i, j;
+	uint16_t line;
 	
+	for(i = 0; i < 16; i++){
+		line = player_north[i];
+		for(j = 0; j < 16; j++){
+			if( ((line>> (15 - j)) & 0x01) == 0x01 ){
+				LCD_SetPoint(Xpos + j , Ypos + i,bkColor);
+			} else {
+				LCD_SetPoint( Xpos + j, Ypos + i, color );				
+			}
+		}
+	}
+
 }
+
+void Print_Wall(uint16_t Xpos, uint16_t Ypos){
+	int i, j, p;
+  uint32_t tmp_char;
+
+	for(i = 0; i < 16; i++){
+		tmp_char = slime4bit[i];
+		
+		for( j = 0; j < 16; j++){
+			p = ((tmp_char >> (30 - 2*j)) & 0x3);
+			LCD_SetPoint(Xpos + j, Ypos + i, palette[p]);
+		}
+	}
+}
+
 
 void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t color){
 	int index;

@@ -68,6 +68,7 @@
 #define Red            0xF800
 #define Magenta        0xF81F
 #define Green          0x07E0
+#define GREEN					 0x4EA4
 #define Cyan           0x7FFF
 #define Yellow         0xFFE0
 
@@ -98,6 +99,10 @@ void LCD_DrawLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t
 void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t color);
 void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_t bkColor, unsigned int scale);
 void PutChar(uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, uint16_t bkColor, unsigned int scale);
+
+
+void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned int mode, uint16_t color, uint16_t bkColor);
+void Print_Wall(uint16_t Xpos, uint16_t Ypos);
 
 #endif 
 
