@@ -1,3 +1,5 @@
+#ifndef _H_LABYRINTH
+#define _H_LABYRINTH
 /*----------------------------------------------------------------------------
 	Here the methods and the functions that modify the status of the game
 	are defined, with constants like the map matrix and its dimensions
@@ -11,8 +13,7 @@
 enum direction { NORTH = 0, EAST, SOUTH, WEST};
 
 // Global variables
-extern unsigned int game_started;
-const char map[LENGTH][WIDTH] = {
+const char gameMap[LENGTH][WIDTH] = {
 	{2,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
 	{0,0,1,1,1,1,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
@@ -34,3 +35,5 @@ void game_end(void);
 
 void rotate(void);
 void run(void);
+
+#endif
