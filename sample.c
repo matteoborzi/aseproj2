@@ -33,6 +33,8 @@ extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emul
 
 int main(void)
 {
+	//int i,j;
+
   SystemInit();  												/* System Initialization (i.e., PLL)  */
   LCD_Initialization();
 	TP_Init();
@@ -41,8 +43,9 @@ int main(void)
 	LCD_Clear(Black);
 	GUI_Text(16,4, (uint8_t *) "Blind Labyrinth", Yellow, Black, 2);
 	
-	PrintMap(240,208,White);
-	
+	PrintMap(240,208,GREEN);
+	Print_Player(7* 16, 40+(7 * 16), 0, 0, Blue, GREEN);
+
 	//init_timer(0, 0x1312D0 ); 						/* 50ms * 25MHz = 1.25*10^6 = 0x1312D0 */
 	//init_timer(0, 0x6108 ); 						  /* 1ms * 25MHz = 25*10^3 = 0x6108 */
 	//init_timer(0, 0x4E2 ); 						    /* 500us * 25MHz = 1.25*10^3 = 0x4E2 */
