@@ -62,6 +62,7 @@ dkms.conf
 *.User
 *.Mac
 *.Matteo
+*.Paolo
 *.uvproj.saved*
 JLink*
 DebugConfig*
@@ -73,9 +74,8 @@ DebugConfig*
 *.lnp
 *.plg
 RTE*
-*.Paolo
 
 # Pictures
-*.png
 *.bmp
+*.png
 *.jpg
