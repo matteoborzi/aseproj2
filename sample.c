@@ -40,7 +40,7 @@ int main(void)
   LCD_Initialization();
 	TP_Init();
 	init_RIT(0x004C4B40);									
-	TouchPanel_Calibrate();
+	//TouchPanel_Calibrate();
 	
 	LCD_Clear(Black);
 	GUI_Text(16,4, (uint8_t *) "Blind Labyrinth", Yellow, Black, 2);
