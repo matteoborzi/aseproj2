@@ -40,7 +40,8 @@ int main(void)
   SystemInit();
   LCD_Initialization();
 	TP_Init();
-	init_RIT(0x004C4B40);									
+	//init_RIT(0x004C4B40);									
+	init_RIT(0x1312D0);
 	//TouchPanel_Calibrate();
 	
 	LCD_Clear(Black);
