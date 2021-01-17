@@ -9,31 +9,14 @@
 #define	WIDTH 				15
 #define	START_X				7
 #define	START_Y				7
-	
-enum direction { NORTH = 0, EAST, SOUTH, WEST};
 
-// Global variables
-const char gameMap[LENGTH][WIDTH] = {
-	{2,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-	{0,0,1,1,1,1,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
-	{1,1,1,1,1,0,0,1,0,1,0,0,0,1,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
-	{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
-	{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
-	{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
-	{2,0,1,0,0,0,0,0,0,0,0,0,0,0,2},
-};
+enum direction { SOUTH = 0, NORTH, EAST, WEST};
 
 // Game methods
 void game_start(void);
 void game_end(void);
 
-void rotate(void);
+unsigned int rotate(unsigned int);
 void run(void);
 
 #endif

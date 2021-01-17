@@ -9,101 +9,67 @@
 #include "labyrinth.h"
 
 // Constants
-//NORTH , EAST, SOUTH, WEST};
-const int y_ver[4] = {	-1,	0,	1,	 0};
-const int x_ver[4] = {	 0,	1,	0, 	-1};
+//SOUTH = 0, NORTH, EAST, WEST
+const int y_ver[4] = {	1, -1,	0,	0};
+const int x_ver[4] = {	0,	0,	1, -1};
 
-// Local variables
+// Global variables
+const char map[LENGTH][WIDTH] = {
+	{2,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+	{0,0,1,1,1,1,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+	{1,1,1,1,1,0,0,1,0,1,0,0,0,1,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,1,0},	
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+	{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{2,0,1,0,0,0,0,0,0,0,0,0,0,0,2},
+};
+
+
 unsigned int x = START_X;
 unsigned int y = START_Y;
+unsigned int current_direction;
 
-unsigned int distance = 0xFFFFFFFF;
-unsigned int current_direction = NORTH;
-unsigned int next_direction = NORTH;
+unsigned int rotate (unsigned int next_direction){
 
-void rotate (void){
-	/*
 	int i, j;
-	uint8_t obstacle_found = 0;
-	uint8_t exit_found = 0;
+	uint8_t obstacle_found;
+	uint8_t out_of_bounds;
+	unsigned int distance;
 	
-	next_direction = (next_direction + 1) % 4;	
-	distance = 0;
-	
+	current_direction = next_direction;
+
 	i = y;
 	j = x;
 	
-	while(obstacle_found == 0 && exit_found == 0){
+	out_of_bounds = 0;
+	distance = 0;
+	obstacle_found = 0;
+	
+	while(obstacle_found == 0 && out_of_bounds == 0 && distance <=6){
 		distance++;
 		i = i + y_ver[next_direction];
 		j = j + x_ver[next_direction];
 
-		if(map[i][j] == 1 || i < 0 || j < 0 || i >= LENGTH || j >= WIDTH){
+		if(i < 0 || j < 0 || i >= LENGTH || j >= WIDTH){
+			out_of_bounds = 1;
+			distance += 0xFF;
+		} else if(map[i][j] == 1){
 			obstacle_found = 1;
-		} else if(map[i][j] == 2){
-			exit_found = 1;
-			distance = 0xFFFFFFFF;
 		}
 	}
 	
-	distance--;
-
-	LED_On(3 - next_direction);
-	NVIC_EnableIRQ(EINT2_IRQn);
-	NVIC_EnableIRQ(TIMER1_IRQn);	
-	init_timer(2,_1HZ_TIMER);
-	if(distance > 5){
-		disable_timer(0);
-		reset_timer(0);
-	} else {
-		init_timer(0,time[distance]);
-		reset_timer(0);
-		enable_timer(0);
-		if (distance == 0){
-			NVIC_DisableIRQ(EINT2_IRQn);
-			NVIC_DisableIRQ(TIMER1_IRQn);
-			init_timer(2,_5HZ_TIMER);
-			reset_timer(2);
-			enable_timer(2);
-		}
-	}
-	*/
+	return distance;
 }
 
 void run (void) {
-/*
-	current_direction = next_direction;
-	
-	x = x + x_ver[current_direction];
-	y = y + y_ver[current_direction];
-	
-	if(map[y][x] == 2) {
-		game_end();
-	} else {
-		distance--;
-
-		LED_On(3 - next_direction);
-		
-		if(distance > 5){
-			disable_timer(0);
-			reset_timer(0);
-		} else {
-			init_timer(0,time[distance]);
-			reset_timer(0);
-			enable_timer(0);
-			if (distance == 0){
-				NVIC_DisableIRQ(TIMER1_IRQn);
-				disable_timer(1);
-				reset_timer(1);
-				
-				NVIC_DisableIRQ(EINT1_IRQn);
-				init_timer(2,_5HZ_TIMER);
-				reset_timer(2);
-				enable_timer(2);
-			}
-		}	
-	}
-*/	
+	y = y + y_ver[current_direction];		
+	x = x + x_ver[current_direction];	
 }
 
 /**
