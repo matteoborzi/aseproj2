@@ -44,6 +44,10 @@ static uint8_t LCD_Code;
 #define  LGDP4535   13 /* 0x4535 */  
 #define  SSD2119    14 /* 3.5 LCD 0x9919 */
 
+#define	 VOFF				40
+#define	 HOFF				0
+
+
 /*******************************************************************************
 * Function Name  : Lcd_Configuration
 * Description    : Configures LCD Control lines
@@ -670,7 +674,19 @@ void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_
     while ( *str != 0 );
 }
 
-void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned int mode, uint16_t color, uint16_t bkColor){
+void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned int mode){
+	int i, j, p;
+  uint32_t tmp_char;
+	
+	for(i = 0; i < 16; i++){
+		tmp_char = slime4bit[direction][i];
+		
+		for( j = 0; j < 16; j++){
+			p = ((tmp_char >> (30 - 2*j)) & 0x3);
+			LCD_SetPoint(HOFF + (Xpos *16) + j, VOFF + (Ypos *16) + i, palette[direction][p]);
+		}
+	}
+/*
 	int i, j;
 	uint16_t line;
 	
@@ -684,19 +700,20 @@ void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned
 			}
 		}
 	}
+*/
 
 }
 
 void Print_Wall(uint16_t Xpos, uint16_t Ypos){
 	int i, j, p;
   uint32_t tmp_char;
-
+	
 	for(i = 0; i < 16; i++){
-		tmp_char = slime4bit[i];
+		tmp_char = walls[i];
 		
 		for( j = 0; j < 16; j++){
 			p = ((tmp_char >> (30 - 2*j)) & 0x3);
-			LCD_SetPoint(Xpos + j, Ypos + i, palette[p]);
+			LCD_SetPoint(HOFF + (Xpos *16) + j, VOFF + (Ypos *16) + i, treePalette[p]);
 		}
 	}
 }
@@ -712,6 +729,19 @@ void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t color){
 		LCD_WriteData(color);
 	}
 }
+
+void Remove_Player(uint16_t Xpos, uint16_t Ypos, uint16_t color){
+	int i,j;
+	
+	for(i=0;i<16;i++){
+		LCD_SetCursor(HOFF + (Xpos*16), VOFF + (Ypos*16) + i);
+		LCD_WriteIndex(0x0022);
+		for(j=0;j<16;j++){
+			LCD_WriteData(color);
+		}
+	}
+}
+
 
 void Clear_Footer(void){
 	int index;
