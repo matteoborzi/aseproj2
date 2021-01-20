@@ -7,13 +7,14 @@
 *********************************************************************************************************/
 #include "lpc17xx.h"
 #include "labyrinth.h"
+#include "../joystick/joystick.h"
+#include "../GLCD/GLCD.h"
 
 // Constants
 //SOUTH = 0, NORTH, EAST, WEST
 const int y_ver[4] = {	1, -1,	0,	0};
 const int x_ver[4] = {	0,	0,	1, -1};
 
-// Global variables
 const char map[LENGTH][WIDTH] = {
 	{2,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
 	{0,0,1,1,1,1,0,0,0,0,0,0,0,0,0},
@@ -30,11 +31,18 @@ const char map[LENGTH][WIDTH] = {
 	{2,0,1,0,0,0,0,0,0,0,0,0,0,0,2},
 };
 
-
+// Local variables
 unsigned int x = START_X;
 unsigned int y = START_Y;
 unsigned int current_direction;
 
+// Extern variables
+extern unsigned int game_status;
+extern unsigned int current_mode;
+
+/**
+ *	
+ */
 unsigned int rotate (unsigned int next_direction){
 
 	int i, j;
@@ -68,8 +76,39 @@ unsigned int rotate (unsigned int next_direction){
 }
 
 void run (void) {
+	Remove_Player(x,y,White);
+
 	y = y + y_ver[current_direction];		
 	x = x + x_ver[current_direction];	
+
+	if(map[y][x] == 2){
+		Game_End();
+	} else {
+		Print_Player(x,y, WEST,0);
+	}
+}
+
+/**
+ *	Game initialization after SystemInit
+ */
+void Game_Init(void){
+	joystick_deinit();
+	
+	game_status = 0;
+	LCD_Clear(Black);
+	
+	GUI_Text(16,4, (uint8_t *) "Blind Labyrinth", Yellow, Black, 2);
+		
+	PrintMap(240,208,40,White);
+	
+	// CLEAR button coordinates: (8,260),(112,260),(8,304),(112,304)
+	Print_Button(8,260,44,104,(uint8_t*) "Clear",Yellow, Black,16,6);
+	// RESTART button coordinates: (128,260),(232,260),(128,304),(232,304)
+	Print_Button(128,260,44,104, (uint8_t*) "Restart", Yellow, Black,2,6);
+	
+	// START text area
+	GUI_Text(8,96, (uint8_t *) "Touch here", Black, White, 3);
+	GUI_Text(32,144, (uint8_t *) "to start", Black, White, 3);
 }
 
 /**
@@ -78,66 +117,32 @@ void run (void) {
  *		-	KEY1 has priority 1 (rotation stops any running action)
  *		-	KEY2 has priority 2
  */
-void game_start(void) {
-	/*
-	game_started = 1;
+void Game_Start(void) {
+	// Game variables initialization
+	game_status = 1;
+	x = START_X;
+	y = START_Y;
+	current_direction = SOUTH;
+	current_mode = EXPLORE;
 
-	LPC_PINCON->PINSEL4   &= ~(1 << 20);		// External interrupt 0 pin disabled
-  LPC_PINCON->PINSEL4    |= (1 << 22);    // External interrupt 1 pin selection
-  LPC_PINCON->PINSEL4    |= (1 << 24);    // External interrupt 2 pin selection
+	// Joystick initialization
+	joystick_init();	
 
-  LPC_SC->EXTMODE = 0x6;									// Only EINT0 is disabled
+	// Screen initialization
+	PrintMap(240,208,40,White);
+	Print_Player(x,y,current_direction,current_mode);
 	
-	// INT0 button is not needed any more
-	NVIC_DisableIRQ(EINT0_IRQn);						// Disable IRQ for EINT0 in nvic			
-
-	// KEY1 button handles rotation
-  NVIC_EnableIRQ(EINT1_IRQn);             // enable IRQ for EINT1 in nvic       
-	NVIC_SetPriority(EINT1_IRQn, 1);				// priority is lower than RIT handler  		
-
-	// KEY2 button handles running
-  NVIC_EnableIRQ(EINT2_IRQn);             // enable IRQ for EINT2 in nvic       
-	NVIC_SetPriority(EINT2_IRQn, 1);				// priority is lower than RIT handler 
-	
-	// Timers initialization
-	init_timer(1,STEP_NCYCLES);							// Initialization of TIMER1 (1 sec)		
-	init_timer(2,_1HZ_TIMER);								// Initialization of TIMER2 (10 Hz)		
-	disable_timer(0);
-	disable_timer(1);
-	disable_timer(2);
-
-	// Reset and initialize LEDs
-	LED_Out(0);
-	rotate();
-	*/
 }
 
 
-void game_end (void){
-	/*
-	game_started = 2;
+void Game_End (void){
+	game_status = 2;
 
-	// Disable all interrupts
-	NVIC_DisableIRQ(TIMER0_IRQn);
-	NVIC_DisableIRQ(TIMER1_IRQn);
-	NVIC_DisableIRQ(TIMER2_IRQn);
-	NVIC_DisableIRQ(EINT0_IRQn);
-	NVIC_DisableIRQ(EINT1_IRQn);
-	NVIC_DisableIRQ(EINT2_IRQn);
-	NVIC_DisableIRQ(RIT_IRQn);
-	
-	// Disable all timers
-	disable_timer(0);
-	disable_timer(1);
-	disable_timer(2);
-	
-	// All LEDs blink endlessly at 1 Hz
-	LPC_SC->PCLKSEL1  &=  ~(1<<14);
-	init_timer(3,_1HZ_TIMER);
-	reset_timer(3);
-	LED_Out(0x2F);
-	enable_timer(3);	
-	*/
+	joystick_deinit();
+	PrintMap(240,208,40,White);
+	GUI_Text(18,80, (uint8_t *) "VICTORY", Black, White, 4);
+	GUI_Text(40,144, (uint8_t *) "Press RESET or RESTART",Black, White, 1);
+	GUI_Text(68,160, (uint8_t *) "for a new game",Black, White, 1); 
 }
 
 /******************************************************************************

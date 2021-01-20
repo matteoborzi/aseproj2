@@ -15,8 +15,9 @@ enum direction { SOUTH = 0, NORTH, EAST, WEST};
 enum mode {EXPLORE = 0, MOVE};
 
 // Game methods
-void game_start(void);
-void game_end(void);
+void Game_Init(void);
+void Game_Start(void);
+void Game_End(void);
 
 unsigned int rotate(unsigned int);
 void run(void);

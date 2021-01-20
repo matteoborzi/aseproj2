@@ -52,7 +52,8 @@ void RIT_IRQHandler (void)
 			pressed[SEL]++;
 			switch(pressed[SEL]){
 				case 1:
-				GUI_Text(8,256,(uint8_t*) "SELECT", White, Black, 1);
+					current_mode = (current_mode+1)%2;
+					Print_Player(x,y,current_direction,current_mode);
 					break;
 				default:
 					break;
@@ -67,20 +68,20 @@ void RIT_IRQHandler (void)
 			switch(pressed[UP]){
 				case 1:
 					distance = rotate(NORTH);
-					Print_Player(x,y,NORTH,0);
+					Print_Player(x,y,NORTH,current_mode);
 					if(distance <=6){
 						Print_Wall(x,y-distance);
 					}
 					break;
 				case 20:
-					if(distance > 0xFF){
-						distance -= 0xFF;
-					}
-					if(distance > 1) {
-						Remove_Player(x,y,White);
-						run();
-						Print_Player(x,y, NORTH,0);
-						pressed[UP] = 0;
+					if(current_mode == MOVE){
+						if(distance > 0xFF){
+							distance -= 0xFF;
+						}
+						if(distance > 1) {
+							run();
+							pressed[UP] = 0;
+						}
 					}
 					break;
 				default:
@@ -96,20 +97,20 @@ void RIT_IRQHandler (void)
 			switch(pressed[DOWN]){
 				case 1:
 					distance = rotate(SOUTH);
-					Print_Player(x,y, SOUTH,0);
+					Print_Player(x,y, SOUTH,current_mode);
 					if(distance <=6){
 						Print_Wall(x,y+distance);
 					}
 					break;
 				case 20:
-					if(distance > 0xFF){
-						distance -= 0xFF;
-					}
-					if(distance > 1) {
-						Remove_Player(x,y,White);
-						run();
-						Print_Player(x,y, SOUTH,0);
-						pressed[DOWN] = 0;
+					if(current_mode == MOVE){
+						if(distance > 0xFF){
+							distance -= 0xFF;
+						}
+						if(distance > 1) {
+							run();
+							pressed[DOWN] = 0;
+						}
 					}
 					break;
 				default:
@@ -125,20 +126,20 @@ void RIT_IRQHandler (void)
 			switch(pressed[LEFT]){
 				case 1:
 					distance = rotate(WEST);
-					Print_Player(x,y, WEST,0);
+					Print_Player(x,y, WEST,current_mode);
 					if(distance <=6){
 						Print_Wall(x-distance,y);
 					}
 					break;
 				case 20:
-					if(distance > 0xFF){
-						distance -= 0xFF;
-					}
-					if(distance > 1) {
-						Remove_Player(x,y,White);
-						run();
-						Print_Player(x,y, WEST,0);
-						pressed[LEFT] = 0;
+					if(current_mode == MOVE){
+						if(distance > 0xFF){
+							distance -= 0xFF;
+						}
+						if(distance > 1) {
+							run();
+							pressed[LEFT] = 0;
+						}
 					}
 					break;
 				default:
@@ -154,20 +155,20 @@ void RIT_IRQHandler (void)
 			switch(pressed[RIGHT]){
 				case 1:
 					distance = rotate(EAST);
-					Print_Player(x,y, EAST,0);
+					Print_Player(x,y, EAST,current_mode);
 					if(distance <=6){
 						Print_Wall(x+distance,y);
 					}
 					break;
 				case 20:
-					if(distance > 0xFF){
-						distance -= 0xFF;
-					}
-					if(distance > 1) {
-						Remove_Player(x,y,White);
-						run();
-						Print_Player(x,y,EAST,0);
-						pressed[RIGHT] = 0;
+					if(current_mode == MOVE){
+						if(distance > 0xFF){
+							distance -= 0xFF;
+						}
+						if(distance > 1) {
+							run();
+							pressed[RIGHT] = 0;
+						}
 					}
 					break;
 				default:
@@ -190,10 +191,8 @@ void RIT_IRQHandler (void)
 			if(display.y >40 && display.y < 208 && game_status == 0){
 				start++;
 				if(start%2==0){
-						game_status = 1;
-						PrintMap(240,208,40,White);
-						Print_Player(7,7,SOUTH,0);
-					}
+					Game_Start();
+				}
 				
 			// Clear button
 			} else if(display.x >=8 && display.x<=112 && display.y >=260 && display.y <=304 && game_status == 1){
@@ -207,10 +206,7 @@ void RIT_IRQHandler (void)
 			} else if(display.x >=128 && display.x<=232 && display.y >=260 && display.y <=304){
 				reset++;
 				if(reset%5==0){
-					game_status = 0;
-					PrintMap(240,208,40,White);
-					GUI_Text(8,96, (uint8_t *) "Touch here", Black, White, 3);
-					GUI_Text(32,144, (uint8_t *) "to start", Black, White, 3);
+					Game_Init();
 				}
 			}
 			
