@@ -22,7 +22,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "GLCD.h" 
 #include "AsciiLib.h"
-#include "../Bitmaps/bitmaps.h"
+#include "../bitmaps/bitmaps.h"
 
 /* Private variables ---------------------------------------------------------*/
 static uint8_t LCD_Code;
