@@ -1,9 +1,15 @@
 #ifndef _H_LABYRINTH
 #define _H_LABYRINTH
-/*----------------------------------------------------------------------------
-	Here the methods and the functions that modify the status of the game
-	are defined, with constants like the map matrix and its dimensions
- *----------------------------------------------------------------------------*/
+
+/******************************************************************************
+**--------------File Info------------------------------------------------------
+** File name:			labyrinth.h
+**-----------------------------------------------------------------------------
+** Created by:			Matteo Borzi 280104
+** Created date:		2021-01-20
+** Version:					1.3
+** Descriptions:		Blind Labyrinth v2 game logic
+******************************************************************************/
 
 #define	LENGTH				13
 #define	WIDTH 				15
@@ -19,7 +25,13 @@ void Game_Init(void);
 void Game_Start(void);
 void Game_End(void);
 
+// Game logic functions
 unsigned int rotate(unsigned int);
 void run(void);
+void change_mode(void);
 
 #endif
+
+/******************************************************************************
+**                            End Of File
+******************************************************************************/

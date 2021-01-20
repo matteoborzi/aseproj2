@@ -212,8 +212,7 @@ static __attribute__((always_inline)) void LCD_WriteReg(uint16_t LCD_Reg,uint16_
 * Return         : LCD Register Value.
 * Attention		 : None
 *******************************************************************************/
-static __attribute__((always_inline)) uint16_t LCD_ReadReg(uint16_t LCD_Reg)
-{
+static __attribute__((always_inline)) uint16_t LCD_ReadReg(uint16_t LCD_Reg) {
 	uint16_t LCD_RAM;
 	
 	/* Write 16-bit Index (then Read Reg) */
@@ -232,8 +231,7 @@ static __attribute__((always_inline)) uint16_t LCD_ReadReg(uint16_t LCD_Reg)
 * Return         : None
 * Attention		 : None
 *******************************************************************************/
-static void LCD_SetCursor(uint16_t Xpos,uint16_t Ypos)
-{
+static void LCD_SetCursor(uint16_t Xpos,uint16_t Ypos) {
     #if  ( DISP_ORIENTATION == 90 ) || ( DISP_ORIENTATION == 270 )
 	
  	uint16_t temp = Xpos;
@@ -282,8 +280,7 @@ static void LCD_SetCursor(uint16_t Xpos,uint16_t Ypos)
 * Return         : None
 * Attention		 : None
 *******************************************************************************/
-static void delay_ms(uint16_t ms)    
-{ 
+static void delay_ms(uint16_t ms) { 
 	uint16_t i,j; 
 	for( i = 0; i < ms; i++ )
 	{ 
@@ -300,8 +297,7 @@ static void delay_ms(uint16_t ms)
 * Return         : None
 * Attention		 : None
 *******************************************************************************/
-void LCD_Initialization(void)
-{
+void LCD_Initialization(void) {
 	uint16_t DeviceCode;
 	
 	LCD_Configuration();
@@ -390,8 +386,7 @@ void LCD_Initialization(void)
 * Return         : None
 * Attention		 : None
 *******************************************************************************/
-void LCD_Clear(uint16_t Color)
-{
+void LCD_Clear(uint16_t Color) {
 	uint32_t index;
 	
 	if( LCD_Code == HX8347D || LCD_Code == HX8347A )
@@ -428,8 +423,7 @@ void LCD_Clear(uint16_t Color)
 * Return         : RGB 颜色值
 * Attention		 : 内部函数调用
 *******************************************************************************/
-static uint16_t LCD_BGR2RGB(uint16_t color)
-{
+static uint16_t LCD_BGR2RGB(uint16_t color) {
 	uint16_t  r, g, b, rgb;
 	
 	b = ( color>>0 )  & 0x1f;
@@ -450,8 +444,7 @@ static uint16_t LCD_BGR2RGB(uint16_t color)
 * Return         : Screen Color
 * Attention		 : None
 *******************************************************************************/
-uint16_t LCD_GetPoint(uint16_t Xpos,uint16_t Ypos)
-{
+uint16_t LCD_GetPoint(uint16_t Xpos,uint16_t Ypos) {
 	uint16_t dummy;
 	
 	LCD_SetCursor(Xpos,Ypos);
@@ -464,8 +457,8 @@ uint16_t LCD_GetPoint(uint16_t Xpos,uint16_t Ypos)
 		case LGDP4535:
 		case SSD1289:
 		case SSD1298:
-             dummy = LCD_ReadData();   /* Empty read */
-             dummy = LCD_ReadData(); 	
+				 dummy = LCD_ReadData();   /* Empty read */
+				 dummy = LCD_ReadData(); 	
  		     return  dummy;	      
 	    case HX8347A:
 	    case HX8347D:
@@ -497,12 +490,11 @@ uint16_t LCD_GetPoint(uint16_t Xpos,uint16_t Ypos)
 * Return         : None
 * Attention		 : None
 *******************************************************************************/
-void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point)
-{
-	if( Xpos >= MAX_X || Ypos >= MAX_Y )
-	{
+void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point) {
+	if( Xpos >= MAX_X || Ypos >= MAX_Y ) {
 		return;
 	}
+	
 	LCD_SetCursor(Xpos,Ypos);
 	LCD_WriteReg(0x0022,point);
 }
@@ -510,112 +502,94 @@ void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point)
 /******************************************************************************
 * Function Name  : LCD_DrawLine
 * Description    : Bresenham's line algorithm
-* Input          : - x1: A点行座标
-*                  - y1: A点列座标 
-*				   - x2: B点行座标
-*				   - y2: B点列座标 
-*				   - color: 线颜色
+* Input          : - line coordinates (x1,y1), (x2,y2)
+*								   - color: line color
 * Output         : None
 * Return         : None
 * Attention		 : None
 *******************************************************************************/	 
-void LCD_DrawLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t color )
-{
-    short dx,dy;      /* 定义X Y轴上增加的变量值 */
-    short temp;       /* 起点 终点大小比较 交换数据时的中间变量 */
+void LCD_DrawLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t color ) {
+	short dx,dy;
+	short temp;
 
-    if( x0 > x1 )     /* X轴上起点大于终点 交换数据 */
-    {
-	    temp = x1;
+	if( x0 > x1 ) {
+		temp = x1;
 		x1 = x0;
 		x0 = temp;   
-    }
-    if( y0 > y1 )     /* Y轴上起点大于终点 交换数据 */
-    {
+	}
+
+	if( y0 > y1 ) {
 		temp = y1;
 		y1 = y0;
 		y0 = temp;   
-    }
+	}
   
-	dx = x1-x0;       /* X轴方向上的增量 */
-	dy = y1-y0;       /* Y轴方向上的增量 */
+	dx = x1-x0;
+	dy = y1-y0;
 
-    if( dx == 0 )     /* X轴上没有增量 画垂直线 */ 
-    {
-        do
-        { 
-            LCD_SetPoint(x0, y0, color);   /* 逐点显示 描垂直线 */
-            y0++;
-        }
-        while( y1 >= y0 ); 
+	if( dx == 0 ) {
+		do { 
+			LCD_SetPoint(x0, y0, color);
+			y0++;
+		} while( y1 >= y0 ); 
+		
 		return; 
-    }
-    if( dy == 0 )     /* Y轴上没有增量 画水平直线 */ 
-    {
-        do
-        {
-            LCD_SetPoint(x0, y0, color);   /* 逐点显示 描水平线 */
-            x0++;
-        }
-        while( x1 >= x0 ); 
+	}
+	
+	if( dy == 0 ) {
+		do {
+			LCD_SetPoint(x0, y0, color);
+			x0++;
+		} while( x1 >= x0 ); 
+		
 		return;
-    }
-	/* 布兰森汉姆(Bresenham)算法画线 */
-    if( dx > dy )                         /* 靠近X轴 */
-    {
-	    temp = 2 * dy - dx;               /* 计算下个点的位置 */         
-        while( x0 != x1 )
-        {
-	        LCD_SetPoint(x0,y0,color);    /* 画起点 */ 
-	        x0++;                         /* X轴上加1 */
-	        if( temp > 0 )                /* 判断下下个点的位置 */
-	        {
-	            y0++;                     /* 为右上相邻点，即（x0+1,y0+1） */ 
-	            temp += 2 * dy - 2 * dx; 
-	 	    }
-            else         
-            {
-			    temp += 2 * dy;           /* 判断下下个点的位置 */  
+	}
+
+	if( dx > dy ) {
+		temp = 2 * dy - dx;
+		while( x0 != x1 ) {
+			LCD_SetPoint(x0,y0,color);
+			x0++;
+
+			if( temp > 0 ) {
+				y0++;
+				temp += 2 * dy - 2 * dx; 
+
+			} else {
+				temp += 2 * dy;
 			}       
-        }
-        LCD_SetPoint(x0,y0,color);
-    }  
-    else
-    {
-	    temp = 2 * dx - dy;                      /* 靠近Y轴 */       
-        while( y0 != y1 )
-        {
-	 	    LCD_SetPoint(x0,y0,color);     
-            y0++;                 
-            if( temp > 0 )           
-            {
-                x0++;               
-                temp+=2*dy-2*dx; 
-            }
-            else
-			{
-                temp += 2 * dy;
+		}
+		LCD_SetPoint(x0,y0,color);
+	} else {
+		temp = 2 * dx - dy;      
+		while( y0 != y1 ) {
+			LCD_SetPoint(x0,y0,color);     
+			y0++;                 
+
+			if( temp > 0 ) {
+				x0++;               
+				temp+=2*dy-2*dx; 
+			} else {
+				temp += 2 * dy;
 			}
-        } 
-        LCD_SetPoint(x0,y0,color);
+		}
+		LCD_SetPoint(x0,y0,color);
 	}
 } 
 
 
 /******************************************************************************
 * Function Name  : PutChar
-* Description    : 将Lcd屏上任意位置显示一个字符
-* Input          : - Xpos: 水平坐标 
-*                  - Ypos: 垂直坐标  
-*				   - ASCI: 显示的字符
-*				   - charColor: 字符颜色   
-*				   - bkColor: 背景颜色 
+* Description    : Display an ASCII character on screen with a specific scale
+* Input          : - Xpos, Ypos: upper left coordinates  
+*								   - ASCI: character to be displayer
+*								   - charColor: character color
+*								   - bkColor: background color
 * Output         : None
 * Return         : None
-* Attention		 : None
+* Attention			 : None
 *******************************************************************************/
-void PutChar( uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, uint16_t bkColor, unsigned int scale)
-{
+void PutChar( uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, uint16_t bkColor, unsigned int scale) {
 	uint16_t i, j, k, l;
     uint8_t buffer[16], tmp_char;
     GetASCIICode(buffer,ASCI);
@@ -639,38 +613,31 @@ void PutChar( uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, ui
 /******************************************************************************
 * Function Name  : GUI_Text
 * Description    : Display a string with a specific scale
-* Input          : - Xpos: 行座标
-*                  - Ypos: 列座标 
-*				   - str: 字符串
-*				   - charColor: 字符颜色   
-*				   - bkColor: 背景颜色 
+* Input          : - Xpos, Ypos: upper left coordinates 
+*								   - str: text pointer
+*								   - charColor: text color
+*								   - bkColor: background color
 * Output         : None
 * Return         : None
-* Attention		 : None
+* Attention			 : None
 *******************************************************************************/
-void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_t bkColor, unsigned int scale)
-{
-    uint8_t TempChar;
-    do
-    {
-        TempChar = *str++;  
-        PutChar( Xpos, Ypos, TempChar, Color, bkColor, scale);    
-        if( Xpos < MAX_X - 7*scale )
-        {
-            Xpos += 7 * scale;
-        } 
-        else if ( Ypos < MAX_Y - 16 * scale)
-        {
-            Xpos = 0;
-            Ypos += 16*scale;
-        }   
-        else
-        {
-            Xpos = 0;
-            Ypos = 0;
-        }    
-    }
-    while ( *str != 0 );
+void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_t bkColor, unsigned int scale) {
+	uint8_t TempChar;
+	do {
+		TempChar = *str++;  
+		PutChar( Xpos, Ypos, TempChar, Color, bkColor, scale);    
+        
+		if( Xpos < MAX_X - 7*scale ) {
+			Xpos += 7 * scale;
+			
+		} else if ( Ypos < MAX_Y - 16 * scale) {
+			Xpos = 0;
+			Ypos += 16*scale;
+		} else {
+			Xpos = 0;
+			Ypos = 0;
+		}    
+	} while ( *str != 0 );
 }
 
 /*******************************************************************************

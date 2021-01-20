@@ -52,8 +52,7 @@ void RIT_IRQHandler (void)
 			pressed[SEL]++;
 			switch(pressed[SEL]){
 				case 1:
-					current_mode = (current_mode+1)%2;
-					Print_Player(x,y,current_direction,current_mode);
+					change_mode();
 					break;
 				default:
 					break;
@@ -68,10 +67,6 @@ void RIT_IRQHandler (void)
 			switch(pressed[UP]){
 				case 1:
 					distance = rotate(NORTH);
-					Print_Player(x,y,NORTH,current_mode);
-					if(distance <=6){
-						Print_Wall(x,y-distance);
-					}
 					break;
 				case 20:
 					if(current_mode == MOVE){
@@ -97,10 +92,6 @@ void RIT_IRQHandler (void)
 			switch(pressed[DOWN]){
 				case 1:
 					distance = rotate(SOUTH);
-					Print_Player(x,y, SOUTH,current_mode);
-					if(distance <=6){
-						Print_Wall(x,y+distance);
-					}
 					break;
 				case 20:
 					if(current_mode == MOVE){
@@ -126,10 +117,6 @@ void RIT_IRQHandler (void)
 			switch(pressed[LEFT]){
 				case 1:
 					distance = rotate(WEST);
-					Print_Player(x,y, WEST,current_mode);
-					if(distance <=6){
-						Print_Wall(x-distance,y);
-					}
 					break;
 				case 20:
 					if(current_mode == MOVE){
@@ -155,10 +142,6 @@ void RIT_IRQHandler (void)
 			switch(pressed[RIGHT]){
 				case 1:
 					distance = rotate(EAST);
-					Print_Player(x,y, EAST,current_mode);
-					if(distance <=6){
-						Print_Wall(x+distance,y);
-					}
 					break;
 				case 20:
 					if(current_mode == MOVE){
@@ -198,7 +181,7 @@ void RIT_IRQHandler (void)
 			} else if(display.x >=8 && display.x<=112 && display.y >=260 && display.y <=304 && game_status == 1){
 				clear++;
 				if(clear%5==0){	
-					PrintMap(240,208,40,White);
+					Print_Map(240,208,0,40,White);
 					Print_Player(x,y,current_direction,current_mode);
 				}
 				

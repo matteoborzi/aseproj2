@@ -1,6 +1,6 @@
 /***************************************** File info *****************************************************
 ** File name:               main.c
-** Descriptions:            Blind labyrinth main function 
+** Descriptions:            Blind Labyrinth v2 main function 
 **
 **--------------------------------------------------------------------------------------------------------
 ** Created by:              Matteo Borzi 280104
@@ -15,7 +15,6 @@
 #include "LPC17xx.h"
 #include "GLCD/GLCD.h" 
 #include "TouchPanel/TouchPanel.h"
-#include "timer/timer.h"
 #include "RIT/RIT.h"
 #include "labyrinth/labyrinth.h"
 
@@ -26,9 +25,7 @@ extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emul
 unsigned int game_status = 0;
 unsigned int current_mode = 0;
 
-int main(void)
-{
-
+int main(void) {
   SystemInit();
   LCD_Initialization();
 	TP_Init();

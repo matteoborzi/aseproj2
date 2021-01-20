@@ -1,7 +1,7 @@
 /*********************************************************************************************************
 **--------------File Info---------------------------------------------------------------------------------
 ** File name:           lib_labyrinth.c
-** Last modified Date:  2021-01-12
+** Last modified Date:  2021-01-20
 ** Correlated files:    labyrinth.h
 **--------------------------------------------------------------------------------------------------------
 *********************************************************************************************************/
@@ -40,11 +40,15 @@ unsigned int current_direction;
 extern unsigned int game_status;
 extern unsigned int current_mode;
 
-/**
- *	
- */
-unsigned int rotate (unsigned int next_direction){
 
+/******************************************************************************
+* Function Name  : rotate
+* Description    : Handles logic for player rotation and its display placement
+* Input          :	- next_direction: chosen direction for rotation
+* Return         :	- distance: from next obstacle if found within 6 steps
+*										- distance + 0xFF: if obstacle is not found
+*******************************************************************************/
+unsigned int rotate (unsigned int next_direction){
 	int i, j;
 	uint8_t obstacle_found;
 	uint8_t out_of_bounds;
@@ -52,6 +56,8 @@ unsigned int rotate (unsigned int next_direction){
 	
 	current_direction = next_direction;
 
+	Print_Player(x,y,next_direction,current_mode);
+	
 	i = y;
 	j = x;
 	
@@ -72,9 +78,18 @@ unsigned int rotate (unsigned int next_direction){
 		}
 	}
 	
+	if(distance<=6 && obstacle_found == 1)
+		Print_Wall(j,i);
+	
 	return distance;
 }
 
+
+/******************************************************************************
+* Function Name  : run
+* Description    : Game logic for player step and its display
+* Return         : None
+*******************************************************************************/
 void run (void) {
 	Remove_Player(x,y,White);
 
@@ -84,13 +99,27 @@ void run (void) {
 	if(map[y][x] == 2){
 		Game_End();
 	} else {
-		Print_Player(x,y, WEST,0);
+		Print_Player(x,y, current_direction,0);
 	}
 }
 
-/**
- *	Game initialization after SystemInit
- */
+
+/******************************************************************************
+* Function Name  : change_mode
+* Description    : Switch mode between EXPLORE and MOVE and display player
+* Return         : None
+*******************************************************************************/
+void change_mode(void){
+	current_mode = (current_mode+1)%2;
+	Print_Player(x,y,current_direction,current_mode);
+}
+
+
+/******************************************************************************
+* Function Name  : Game_Init
+* Description    : Game initialization after SystemInit
+* Return         : None
+*******************************************************************************/
 void Game_Init(void){
 	joystick_deinit();
 	
@@ -99,10 +128,11 @@ void Game_Init(void){
 	
 	GUI_Text(16,4, (uint8_t *) "Blind Labyrinth", Yellow, Black, 2);
 		
-	PrintMap(240,208,40,White);
+	Print_Map(240,208,0,40,White);
 	
 	// CLEAR button coordinates: (8,260),(112,260),(8,304),(112,304)
 	Print_Button(8,260,44,104,(uint8_t*) "Clear",Yellow, Black,16,6);
+	
 	// RESTART button coordinates: (128,260),(232,260),(128,304),(232,304)
 	Print_Button(128,260,44,104, (uint8_t*) "Restart", Yellow, Black,2,6);
 	
@@ -111,14 +141,12 @@ void Game_Init(void){
 	GUI_Text(32,144, (uint8_t *) "to start", Black, White, 3);
 }
 
-/**
- *	This function disables the INT0 button interrupt and enables interrupts
- *	for buttons KEY1 and KEY2.
- *		-	KEY1 has priority 1 (rotation stops any running action)
- *		-	KEY2 has priority 2
- */
+/******************************************************************************
+* Function Name  : Game_Start
+* Description    : Initialize game logic and joystick
+* Return         : None
+*******************************************************************************/
 void Game_Start(void) {
-	// Game variables initialization
 	game_status = 1;
 	x = START_X;
 	y = START_Y;
@@ -129,20 +157,25 @@ void Game_Start(void) {
 	joystick_init();	
 
 	// Screen initialization
-	PrintMap(240,208,40,White);
+	Print_Map(240,208,0,40,White);
 	Print_Player(x,y,current_direction,current_mode);
-	
 }
 
 
+/******************************************************************************
+* Function Name  : Game_End
+* Description    : Set victory screen up and disable joystick
+* Return         : None
+*******************************************************************************/
 void Game_End (void){
 	game_status = 2;
 
 	joystick_deinit();
-	PrintMap(240,208,40,White);
+	Print_Map(240,208,0,40,White);
 	GUI_Text(18,80, (uint8_t *) "VICTORY", Black, White, 4);
 	GUI_Text(40,144, (uint8_t *) "Press RESET or RESTART",Black, White, 1);
 	GUI_Text(68,160, (uint8_t *) "for a new game",Black, White, 1); 
+	Print_Player(7,9,SOUTH,MOVE);
 }
 
 /******************************************************************************
