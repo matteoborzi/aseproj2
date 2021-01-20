@@ -35,6 +35,7 @@ const char map[LENGTH][WIDTH] = {
 unsigned int x = START_X;
 unsigned int y = START_Y;
 unsigned int current_direction;
+unsigned int current_distance;
 
 // Extern variables
 extern unsigned int game_status;
@@ -45,10 +46,11 @@ extern unsigned int current_mode;
 * Function Name  : rotate
 * Description    : Handles logic for player rotation and its display placement
 * Input          :	- next_direction: chosen direction for rotation
-* Return         :	- distance: from next obstacle if found within 6 steps
+* Output         :	- distance from next obstacle if found within 6 steps
 *										- distance + 0xFF: if obstacle is not found
+* Return				 : None
 *******************************************************************************/
-unsigned int rotate (unsigned int next_direction){
+void rotate (unsigned int next_direction){
 	int i, j;
 	uint8_t obstacle_found;
 	uint8_t out_of_bounds;
@@ -81,7 +83,7 @@ unsigned int rotate (unsigned int next_direction){
 	if(distance<=6 && obstacle_found == 1)
 		Print_Wall(j,i);
 	
-	return distance;
+	current_distance = distance;
 }
 
 
@@ -91,15 +93,21 @@ unsigned int rotate (unsigned int next_direction){
 * Return         : None
 *******************************************************************************/
 void run (void) {
-	Remove_Player(x,y,White);
+	if(current_distance > 0xFF){
+		current_distance -= 0xFF;
+	}
+	
+	if(current_distance > 1) {
+		Remove_Player(x,y,White);
 
-	y = y + y_ver[current_direction];		
-	x = x + x_ver[current_direction];	
+		y = y + y_ver[current_direction];		
+		x = x + x_ver[current_direction];	
 
-	if(map[y][x] == 2){
-		Game_End();
-	} else {
-		Print_Player(x,y, current_direction,0);
+		if(map[y][x] == 2){
+			Game_End();
+		} else {
+			Print_Player(x,y, current_direction,0);
+		}
 	}
 }
 
@@ -178,6 +186,16 @@ void Game_End (void){
 	Print_Player(7,9,SOUTH,MOVE);
 }
 
+/******************************************************************************
+* Function Name  : Game_Clear
+* Description    : Reset map display and draws sprite in its currnent
+*									 position and direction
+* Return         : None
+*******************************************************************************/
+void Game_Clear(void){
+	Print_Map(240,208,0,40,White);
+	Print_Player(x,y,current_direction,current_mode);
+}
 /******************************************************************************
 **                            End Of File
 ******************************************************************************/

@@ -24,9 +24,10 @@ enum mode {EXPLORE = 0, MOVE};
 void Game_Init(void);
 void Game_Start(void);
 void Game_End(void);
+void Game_Clear(void);
 
 // Game logic functions
-unsigned int rotate(unsigned int);
+void rotate(unsigned int);
 void run(void);
 void change_mode(void);
 

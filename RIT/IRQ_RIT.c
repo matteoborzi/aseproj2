@@ -33,16 +33,15 @@ extern unsigned int current_direction;
 **
 ******************************************************************************/
 
-void RIT_IRQHandler (void)
-{	
+void RIT_IRQHandler (void) {	
 	static unsigned int pressed[5] = {0,0,0,0,0};
-	static unsigned int distance = 0;
 	static unsigned int clear = 0;
 	static unsigned int reset = 0;
 	static unsigned int start = 0;
 	
 	unsigned int regValue;	
 
+	// Joystick section -------------------------------------------------------------
 	if(game_status == 1) {
 		regValue = LPC_GPIO1->FIOPIN ;
 		regValue = (regValue >> 25) & 0x1F;
@@ -66,17 +65,12 @@ void RIT_IRQHandler (void)
 			pressed[UP]++;
 			switch(pressed[UP]){
 				case 1:
-					distance = rotate(NORTH);
+					rotate(NORTH);
 					break;
 				case 20:
 					if(current_mode == MOVE){
-						if(distance > 0xFF){
-							distance -= 0xFF;
-						}
-						if(distance > 1) {
-							run();
-							pressed[UP] = 0;
-						}
+						run();
+						pressed[UP] = 0;
 					}
 					break;
 				default:
@@ -91,17 +85,12 @@ void RIT_IRQHandler (void)
 			pressed[DOWN]++;
 			switch(pressed[DOWN]){
 				case 1:
-					distance = rotate(SOUTH);
+					rotate(SOUTH);
 					break;
 				case 20:
 					if(current_mode == MOVE){
-						if(distance > 0xFF){
-							distance -= 0xFF;
-						}
-						if(distance > 1) {
-							run();
-							pressed[DOWN] = 0;
-						}
+						run();
+						pressed[DOWN] = 0;
 					}
 					break;
 				default:
@@ -116,17 +105,12 @@ void RIT_IRQHandler (void)
 			pressed[LEFT]++;
 			switch(pressed[LEFT]){
 				case 1:
-					distance = rotate(WEST);
+					rotate(WEST);
 					break;
 				case 20:
 					if(current_mode == MOVE){
-						if(distance > 0xFF){
-							distance -= 0xFF;
-						}
-						if(distance > 1) {
-							run();
-							pressed[LEFT] = 0;
-						}
+						run();
+						pressed[LEFT] = 0;
 					}
 					break;
 				default:
@@ -141,17 +125,12 @@ void RIT_IRQHandler (void)
 			pressed[RIGHT]++;
 			switch(pressed[RIGHT]){
 				case 1:
-					distance = rotate(EAST);
+					rotate(EAST);
 					break;
 				case 20:
 					if(current_mode == MOVE){
-						if(distance > 0xFF){
-							distance -= 0xFF;
-						}
-						if(distance > 1) {
-							run();
-							pressed[RIGHT] = 0;
-						}
+						run();
+						pressed[RIGHT] = 0;
 					}
 					break;
 				default:
@@ -162,7 +141,7 @@ void RIT_IRQHandler (void)
 		}
 	}	
 
-	// Touch Panel section
+	// Touch Panel section -------------------------------------------------------------
 	getDisplayPoint(&display, Read_Ads7846(), &matrix ) ;
 	#ifdef SIMULATOR
 		if(display.x <= 240 && display.x > 0 && display.y < 0x013D){
@@ -181,8 +160,7 @@ void RIT_IRQHandler (void)
 			} else if(display.x >=8 && display.x<=112 && display.y >=260 && display.y <=304 && game_status == 1){
 				clear++;
 				if(clear%5==0){	
-					Print_Map(240,208,0,40,White);
-					Print_Player(x,y,current_direction,current_mode);
+					Game_Clear();
 				}
 				
 			// Restart button
