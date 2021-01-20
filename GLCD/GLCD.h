@@ -93,17 +93,15 @@ void LCD_Clear(uint16_t Color);
 uint16_t LCD_GetPoint(uint16_t Xpos,uint16_t Ypos);
 void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point);
 void LCD_DrawLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t color );
-//void PutChar( uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, uint16_t bkColor );
-//void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_t bkColor);
 
-void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t color);
+void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t offset, uint16_t color);
 void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_t bkColor, unsigned int scale);
 void PutChar(uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, uint16_t bkColor, unsigned int scale);
 
+void Print_Button(uint16_t Xpos, uint16_t Ypos, unsigned int height, unsigned int width, uint8_t *text, uint16_t color, uint16_t bgColor, unsigned int hpad, unsigned int vpad);
 void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned int mode);
 void Print_Wall(uint16_t Xpos, uint16_t Ypos);
 void Remove_Player(uint16_t Xpos, uint16_t Ypos, uint16_t color);
-void Clear_Footer(void);
 
 #endif 
 

@@ -686,22 +686,6 @@ void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned
 			LCD_SetPoint(HOFF + (Xpos *16) + j, VOFF + (Ypos *16) + i, palette[direction][p]);
 		}
 	}
-/*
-	int i, j;
-	uint16_t line;
-	
-	for(i = 0; i < 16; i++){
-		line = player_north[i];
-		for(j = 0; j < 16; j++){
-			if( ((line>> (15 - j)) & 0x01) == 0x01 ){
-				LCD_SetPoint(Xpos + j , Ypos + i,bkColor);
-			} else {
-				LCD_SetPoint( Xpos + j, Ypos + i, color );				
-			}
-		}
-	}
-*/
-
 }
 
 void Print_Wall(uint16_t Xpos, uint16_t Ypos){
@@ -719,10 +703,10 @@ void Print_Wall(uint16_t Xpos, uint16_t Ypos){
 }
 
 
-void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t color){
+void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t offset, uint16_t color){
 	int index;
 	
-	LCD_SetCursor(0,40);
+	LCD_SetCursor(0,offset);
 	LCD_WriteIndex(0x0022);
 		for( index = 0; index < X_DIM * Y_DIM; index++ )
 	{
@@ -742,18 +726,34 @@ void Remove_Player(uint16_t Xpos, uint16_t Ypos, uint16_t color){
 	}
 }
 
-
-void Clear_Footer(void){
-	int index;
+void Print_Button(uint16_t Xpos, uint16_t Ypos, unsigned int height, unsigned int width, uint8_t *text, uint16_t color, uint16_t bgColor, unsigned int hpad, unsigned int vpad){
+	int i, j, len;
+	uint8_t* buffer = text;
 	
-	LCD_SetCursor(0,240);
-	LCD_WriteIndex(0x0022);
-		for( index = 0; index < 240* 72 ; index++ )
-	{
-		LCD_WriteData(Black);
+	for(i=0;i<height;i++){
+		LCD_SetCursor(Xpos,Ypos + i);
+		LCD_WriteIndex(0x0022);
+		for(j=0;j<width;j++){
+				if(i<2||j<2|| i>=height-2||j>=width-2){
+					LCD_WriteData(color);
+				} else {
+					LCD_WriteData(bgColor);
+				}
+		}
 	}
-}
+	
+	//LCD_DrawLine(8,260,112,260,Yellow);
+	//LCD_DrawLine(8,260,8,304,Yellow);
+	//LCD_DrawLine(112,260,112,304,Yellow);
+	//LCD_DrawLine(8,304,112,304,Yellow);
+	len = 0;
+	while(*buffer++ != 0)
+		len++;
+	
+	GUI_Text(Xpos + hpad, Ypos + vpad, text, color, bgColor,2);
 
+
+}
 
 /*********************************************************************************************************
       END FILE
