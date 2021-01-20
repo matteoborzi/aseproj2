@@ -416,26 +416,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>timer</GroupName>
-          <Files>
-            <File>
-              <FileName>IRQ_timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\timer\IRQ_timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>lib_timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\timer\lib_timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\timer\timer.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>GLCD</GroupName>
           <Files>
             <File>
@@ -956,26 +936,6 @@
               <FileName>system_LPC17xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\system_LPC17xx.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>timer</GroupName>
-          <Files>
-            <File>
-              <FileName>IRQ_timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\timer\IRQ_timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>lib_timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\timer\lib_timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\timer\timer.h</FilePath>
             </File>
           </Files>
         </Group>
