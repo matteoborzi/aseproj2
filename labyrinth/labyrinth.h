@@ -10,7 +10,9 @@
 #define	START_X				7
 #define	START_Y				7
 
+// Game definitions
 enum direction { SOUTH = 0, NORTH, EAST, WEST};
+enum mode {EXPLORE = 0, MOVE};
 
 // Game methods
 void game_start(void);
