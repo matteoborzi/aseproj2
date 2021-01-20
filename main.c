@@ -30,7 +30,6 @@ int main(void) {
   LCD_Initialization();
 	TP_Init();
 	init_RIT(0x004C4B40);									
-	//init_RIT(0x1312D0);									// Debug purposes
 	TouchPanel_Calibrate();
 	
 	Game_Init();
