@@ -44,8 +44,8 @@ static uint8_t LCD_Code;
 #define  LGDP4535   13 /* 0x4535 */  
 #define  SSD2119    14 /* 3.5 LCD 0x9919 */
 
-#define	 VOFF				40
-#define	 HOFF				0
+#define	 VOFF				40	/* Vertical offset 		*/
+#define	 HOFF				0		/* Horizontal offset	*/
 
 
 /*******************************************************************************
@@ -636,7 +636,6 @@ void PutChar( uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, ui
 }
 
 
-
 /******************************************************************************
 * Function Name  : GUI_Text
 * Description    : Display a string with a specific scale
@@ -674,6 +673,15 @@ void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_
     while ( *str != 0 );
 }
 
+/*******************************************************************************
+* Function Name  : Print_Player
+* Description    : Display player on screen
+* Input          :	-	Coordinates (Xpos, Ypos), 
+*										- player direction
+*										- player mode (EXPLORE or MOVE)
+* Output         : Player sprite on screen
+* Return         : None
+*******************************************************************************/
 void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned int mode){
 	int i, j, p;
   uint32_t tmp_char;
@@ -688,6 +696,13 @@ void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned
 	}
 }
 
+/*******************************************************************************
+* Function Name  : Print_Wall
+* Description    : Display a wall on screen
+* Input          :	-	Coordinates (Xpos, Ypos), 
+* Output         : Wall sprite on screen
+* Return         : None
+*******************************************************************************/
 void Print_Wall(uint16_t Xpos, uint16_t Ypos){
 	int i, j, p;
   uint32_t tmp_char;
@@ -703,10 +718,19 @@ void Print_Wall(uint16_t Xpos, uint16_t Ypos){
 }
 
 
-void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t offset, uint16_t color){
+/*******************************************************************************
+* Function Name  : Print_Map
+* Description    : Clears the map area with a specific color
+* Input          :	- map dimensions (X_DIM, Y_DIM)
+*										- offsets (h_offset, v_offset)
+*										- map color
+* Output         : Map area on screen
+* Return         : None
+*******************************************************************************/
+void Print_Map(uint16_t X_DIM, uint16_t Y_DIM, uint16_t h_offset, uint16_t v_offset, uint16_t color){
 	int index;
 	
-	LCD_SetCursor(0,offset);
+	LCD_SetCursor(h_offset,v_offset);
 	LCD_WriteIndex(0x0022);
 		for( index = 0; index < X_DIM * Y_DIM; index++ )
 	{
@@ -714,6 +738,14 @@ void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t offset, uint16_t color){
 	}
 }
 
+/*******************************************************************************
+* Function Name  : Remove_Player
+* Description    : Removes the player sprite with a specific color
+* Input          :	- player coordinates (Xpos, Ypos)
+*										- map color
+* Output         : Map color is displayed on screen in a 16*16 area
+* Return         : None
+*******************************************************************************/
 void Remove_Player(uint16_t Xpos, uint16_t Ypos, uint16_t color){
 	int i,j;
 	
@@ -726,6 +758,18 @@ void Remove_Player(uint16_t Xpos, uint16_t Ypos, uint16_t color){
 	}
 }
 
+/*******************************************************************************
+* Function Name  : Print_Button
+* Description    : Displays a button on screen
+* Input          :	- button upper left coordinates (Xpos, Ypos)
+*										- button dimensions (height, width)
+*										- button label pointer (*text)
+*										- text and outline color
+*										- background color (bgColor)
+*										- text padding (hpad, vpad)
+* Output         : Map color is displayed on screen in a 16*16 area
+* Return         : None
+*******************************************************************************/
 void Print_Button(uint16_t Xpos, uint16_t Ypos, unsigned int height, unsigned int width, uint8_t *text, uint16_t color, uint16_t bgColor, unsigned int hpad, unsigned int vpad){
 	int i, j, len;
 	uint8_t* buffer = text;
@@ -742,10 +786,6 @@ void Print_Button(uint16_t Xpos, uint16_t Ypos, unsigned int height, unsigned in
 		}
 	}
 	
-	//LCD_DrawLine(8,260,112,260,Yellow);
-	//LCD_DrawLine(8,260,8,304,Yellow);
-	//LCD_DrawLine(112,260,112,304,Yellow);
-	//LCD_DrawLine(8,304,112,304,Yellow);
 	len = 0;
 	while(*buffer++ != 0)
 		len++;

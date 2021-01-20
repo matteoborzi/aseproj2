@@ -4,19 +4,16 @@
 **
 **--------------File Info-------------------------------------------------------------------------------
 ** File name:			GLCD.h
-** Descriptions:		Has been tested SSD1289、ILI9320、R61505U、SSD1298、ST7781、SPFD5408B、ILI9325、ILI9328、
-**						HX8346A、HX8347A
 **------------------------------------------------------------------------------------------------------
 ** Created by:			AVRman
 ** Created date:		2012-3-10
-** Version:				1.3
+** Version:					1.3
 ** Descriptions:		The original version
-**
 **------------------------------------------------------------------------------------------------------
-** Modified by:			
-** Modified date:	
-** Version:
-** Descriptions:		
+** Modified by:			Matteo Borzi 280104
+** Modified date:		2021-01-20
+** Version:					1.1
+** Descriptions:		Custom version for Blind Labyrinth v2
 ********************************************************************************************************/
 
 #ifndef __GLCD_H 
@@ -79,15 +76,15 @@
 (( green >> 2 ) << 5  ) | \
 ( blue  >> 3 ))
 
-/* Private function prototypes -----------------------------------------------*/
+// Private function prototypes -----------------------------------------------
 void LCD_Initialization(void);
 void LCD_Clear(uint16_t Color);
 uint16_t LCD_GetPoint(uint16_t Xpos,uint16_t Ypos);
 void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point);
 void LCD_DrawLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t color );
 
-// Custom function prototypes
-void PrintMap(uint16_t X_DIM, uint16_t Y_DIM, uint16_t offset, uint16_t color);
+// Custom function prototypes ------------------------------------------------
+void Print_Map(uint16_t X_DIM, uint16_t Y_DIM, uint16_t h_offset, uint16_t v_offset, uint16_t color);
 void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_t bkColor, unsigned int scale);
 void PutChar(uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, uint16_t bkColor, unsigned int scale);
 void Print_Button(uint16_t Xpos, uint16_t Ypos, unsigned int height, unsigned int width, uint8_t *text, uint16_t color, uint16_t bgColor, unsigned int hpad, unsigned int vpad);
