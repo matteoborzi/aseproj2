@@ -466,7 +466,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Bitmaps</GroupName>
+          <GroupName>bitmaps</GroupName>
           <Files>
             <File>
               <FileName>bitmaps.h</FileName>
@@ -990,7 +990,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Bitmaps</GroupName>
+          <GroupName>bitmaps</GroupName>
           <Files>
             <File>
               <FileName>bitmaps.h</FileName>
