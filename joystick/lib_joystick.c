@@ -31,3 +31,11 @@ void joystick_init(void) {
 	LPC_GPIO1->FIODIR   &= ~(1<<29);	//P1.29 Input (joysticks on PORT1 defined as Input) 
 
 }
+
+void joystick_deinit(void){
+	LPC_GPIO1->FIODIR   |= (1<<25);
+	LPC_GPIO1->FIODIR   |= (1<<26);
+	LPC_GPIO1->FIODIR   |= (1<<27);
+	LPC_GPIO1->FIODIR   |= (1<<28);
+	LPC_GPIO1->FIODIR   |= (1<<29);
+}
