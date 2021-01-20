@@ -683,7 +683,7 @@ void Print_Player(uint16_t Xpos, uint16_t Ypos, unsigned int direction, unsigned
 		
 		for( j = 0; j < 16; j++){
 			p = ((tmp_char >> (30 - 2*j)) & 0x3);
-			LCD_SetPoint(HOFF + (Xpos *16) + j, VOFF + (Ypos *16) + i, palette[direction][p]);
+			LCD_SetPoint(HOFF + (Xpos *16) + j, VOFF + (Ypos *16) + i, palette[mode][direction][p]);
 		}
 	}
 }

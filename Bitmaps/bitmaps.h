@@ -10,12 +10,23 @@
 #define LGREEN		0x3481
 #define DGREEN		0x1240
 #define BROWN			0x9B47
+#define GREY			0x73AE
+#define DARKGREY	0x4208
 
-const uint16_t palette[4][4] = { 
+const uint16_t palette[2][4][4] = {
+	{
+	{BLACK, PINK, GREY, WHITE}, 
+	{BLACK, WHITE, GREY, DARKGREY},
+	{BLACK, WHITE, PINK, GREY},
+	{BLACK, WHITE, PINK, GREY},	
+	},
+	
+	{ 
 	{BLACK, PINK, BLUE, WHITE}, 
 	{BLACK, WHITE, BLUE, DARKBLUE},
 	{BLACK, WHITE, PINK, BLUE},
 	{BLACK, WHITE, PINK, BLUE},
+}
 };
 
 const uint16_t treePalette[4] = {DGREEN, WHITE, BROWN, LGREEN};
